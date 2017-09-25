@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="nl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>WoordenAction.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;WoordenApplicatie&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">woordenapplicatie</a> &gt; <span class="el_source">WoordenAction.java</span></div><h1>WoordenAction.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package woordenapplicatie;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+/**
+ *
+ * @author Bob
+ */
+<span class="fc" id="L22">public class WoordenAction {</span>
+    public int aantal(String input, boolean unique) {
+<span class="fc" id="L24">        String[] words = getWords(input);</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (unique) {return new TreeSet&lt;&gt;(Arrays.asList(words)).size();}</span>
+<span class="fc" id="L26">        else return words.length;</span>
+    }
+    
+    public Set&lt;String&gt; sorteer(String input, boolean order){
+<span class="fc" id="L30">        TreeSet&lt;String&gt; words = new TreeSet&lt;&gt;(Arrays.asList(getWords(input)));</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (order) {return words;}</span>
+<span class="fc" id="L32">        else return words.descendingSet();</span>
+    }
+    
+    public List&lt;Map.Entry&lt;String, Integer&gt;&gt; frequentie(String input){
+<span class="fc" id="L36">        String[] words = getWords(input);</span>
+<span class="fc" id="L37">        Map&lt;String, Integer&gt; frequenty = new TreeMap&lt;&gt;();</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        for (String s : words)</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            frequenty.put(s, 1 + (frequenty.containsKey(s) ? frequenty.get(s) : 0));</span>
+<span class="fc" id="L40">        return sortByValue(frequenty);</span>
+    }
+    
+    public TreeMap&lt;String, LinkedList&lt;Integer&gt;&gt; concordatie(String input){
+<span class="fc" id="L44">        TreeMap&lt;String, LinkedList&lt;Integer&gt;&gt; concordatie = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L45">        String[] sentences = getSentences(input);</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        for (int i = 0; i &lt; sentences.length; i++)</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            for (String word : sentences[i].split(&quot;\\s+&quot;)){</span>
+<span class="pc bpc" id="L48" title="1 of 4 branches missed.">                if (!concordatie.containsKey(word) || concordatie.get(word) == null){</span>
+<span class="fc" id="L49">                    LinkedList references = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L50">                    references.add(i + 1);</span>
+<span class="fc" id="L51">                    concordatie.put(word, references);</span>
+<span class="fc" id="L52">                }</span>
+                else{
+<span class="fc" id="L54">                    LinkedList references = concordatie.get(word);</span>
+<span class="fc" id="L55">                    references.add(i + 1);</span>
+                }
+            }
+<span class="fc" id="L58">        concordatie.remove(&quot;&quot;);</span>
+<span class="fc" id="L59">        return concordatie;</span>
+    }
+        
+    private String[] getWords(String text){
+<span class="fc" id="L63">        String input = text.toLowerCase();</span>
+<span class="fc" id="L64">        input = input.replaceAll(&quot;\\p{P}&quot;, &quot;&quot;);</span>
+<span class="fc" id="L65">        String[] words = input.split(&quot;\\s+&quot;);</span>
+<span class="fc" id="L66">        return words;</span>
+    }
+    
+    private String[] getSentences(String text){
+<span class="fc" id="L70">        String input = text.toLowerCase();</span>
+<span class="fc" id="L71">        input = input.replaceAll(&quot;\\p{P}&quot;, &quot;&quot;);</span>
+<span class="fc" id="L72">        String[] sentences = input.split(&quot;\n&quot;);</span>
+<span class="fc" id="L73">        return sentences;</span>
+    }
+    
+    private List&lt;Map.Entry&lt;String, Integer&gt;&gt; sortByValue(Map&lt;String, Integer&gt; unsortMap)
+    {
+<span class="fc" id="L78">        List&lt;Map.Entry&lt;String, Integer&gt;&gt; list = new LinkedList&lt;&gt;(unsortMap.entrySet());</span>
+<span class="fc" id="L79">        Collections.sort(list, (Map.Entry&lt;String, Integer&gt; o1, Map.Entry&lt;String, Integer&gt; o2) -&gt; o1.getValue().compareTo(o2.getValue()));</span>
+<span class="fc" id="L80">        return list;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
